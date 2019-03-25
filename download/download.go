@@ -1,6 +1,7 @@
-package main
+package download
 
 import (
+	"github.com/nosajio/markdown-to-json/utils"
 	"gopkg.in/src-d/go-git.v4"
 	"os"
 	"path/filepath"
@@ -10,7 +11,7 @@ import (
 // and delete it if there is. This is to avoid conflicts when the repo is being
 // cloned
 func DeletePreviousRepo(tmpDir string) error {
-	if _, err := os.Stat(tmpDir); os.IsNotExist(err) {
+	if utils.DirectoryExists(tmpDir) {
 		return nil
 	}
 	d, err := os.Open(tmpDir)

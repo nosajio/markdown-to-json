@@ -1,7 +1,7 @@
-package main
+package markdowntojson
 
 import ()
 
-func main() {
+func ProcessRepo() {
 
 }
