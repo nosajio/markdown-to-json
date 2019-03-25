@@ -12,7 +12,7 @@ func TestParse(t *testing.T) {
 	)
 
 	// Ensure posts will be available in specified location
-	download.DownloadPostsToDisk(repo, dir)
+	download.RepoToDisk(repo, dir)
 
 	t.Run("Files(<dir>)", func(t *testing.T) {
 		posts, err := Files(dir)
