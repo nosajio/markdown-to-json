@@ -25,11 +25,11 @@ func TestParse(t *testing.T) {
 		}
 		// Test an individual post for evidence of successful parsing
 		firstPost := posts[0]
-		if firstPost.title == "" || len(firstPost.title) == 0 {
-			t.Errorf("Files(%s) doesn't parse the post title", dir)
+		if firstPost.Title == "" || len(firstPost.Title) == 0 {
+			t.Errorf("Files(%s) doesn't parse the post Title", dir)
 		}
-		if strings.Contains(firstPost.bodyHTML, "<p>") == false {
-			t.Errorf("Files(%s) doesn't parse HTML in bodyHTML", dir)
+		if strings.Contains(firstPost.BodyHTML, "<p>") == false {
+			t.Errorf("Files(%s) doesn't parse HTML in BodyHTML", dir)
 		}
 
 	})

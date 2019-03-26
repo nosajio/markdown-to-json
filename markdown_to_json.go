@@ -11,7 +11,7 @@ import (
 // frontmatter and returns a JSON string
 func ProcessRepo(repoURL string, tmpDIR string) (string, error) {
 	if repoURL == "" || tmpDIR == "" {
-		return "", fmt.Errorf("ProcessRepo() expects repoURL and tmpDIR to be strings")
+		return "", fmt.Errorf("repoURL and tmpDIR are required")
 	}
 	_, err := download.RepoToDisk(repoURL, tmpDIR)
 	if err != nil {

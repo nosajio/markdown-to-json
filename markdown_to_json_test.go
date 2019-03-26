@@ -21,9 +21,9 @@ func TestProcessRepo(t *testing.T) {
 				testRepoDIR)
 		}
 
-		if !strings.HasPrefix(json, "[") {
-			t.Errorf("ProcessRepo(%s, %s) didn't return a valid JSON array",
-				testRepoURL, testRepoDIR)
+		if !strings.HasPrefix(json, "[{") {
+			t.Errorf("ProcessRepo(%s, %s) didn't return a valid JSON array:\n %s",
+				testRepoURL, testRepoDIR, json)
 		}
 	})
 }
