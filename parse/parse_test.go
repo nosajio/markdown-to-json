@@ -2,6 +2,7 @@ package parse
 
 import (
 	"github.com/nosajio/markdown-to-json/download"
+	"strings"
 	"testing"
 )
 
@@ -20,7 +21,15 @@ func TestParse(t *testing.T) {
 			t.Errorf("Files(%s) failed with an error: %s", dir, err.Error())
 		}
 		if posts == nil || len(posts) == 0 {
-			t.Errorf("Files(%s) returned an empty result. Should be slice of Post types", dir)
+			t.Errorf("Files(%s) returned an empty result. Should be slice of Parsed types", dir)
+		}
+		// Test an individual post for evidence of successful parsing
+		firstPost := posts[0]
+		if firstPost.title == "" || len(firstPost.title) == 0 {
+			t.Errorf("Files(%s) doesn't parse the post title", dir)
+		}
+		if strings.Contains(firstPost.bodyHTML, "<p>") == false {
+			t.Errorf("Files(%s) doesn't parse HTML in bodyHTML", dir)
 		}
 
 	})

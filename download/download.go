@@ -32,8 +32,8 @@ func DeletePreviousRepo(tmpDir string) error {
 	return nil
 }
 
-// RepoToDisk takes a url string pointing to a git repo and it
-// checks out the repo, then saves the files to $TMP_DIR
+// RepoToDisk takes a url string pointing to a git repo and it checks out the
+// repo, then saves the files to $TMP_DIR
 func RepoToDisk(fromURL string, tmpDir string) (*git.Repository, error) {
 	err := DeletePreviousRepo(tmpDir)
 	if err != nil {
