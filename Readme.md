@@ -8,7 +8,7 @@ structured JSON string.
 Download a repo containing markdown files to the specified location. In order
 to be able to parse them properly, filenames must be formatted using only
 letters and numbers, with dashes instead of spaces, and with the publish date
-appended to the file in the format `YYYY-MM-DD".
+appended to the file in the format `YYYY-MM-DD`.
 
 
 For example:
