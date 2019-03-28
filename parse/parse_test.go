@@ -4,6 +4,7 @@ import (
 	"github.com/nosajio/markdown-to-json/download"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestParse(t *testing.T) {
@@ -23,6 +24,7 @@ func TestParse(t *testing.T) {
 		if posts == nil || len(posts) == 0 {
 			t.Errorf("Files(%s) returned an empty result. Should be slice of Parsed types", dir)
 		}
+
 		// Test an individual post for evidence of successful parsing
 		firstPost := posts[0]
 		if firstPost.Title == "" || len(firstPost.Title) == 0 {
@@ -32,5 +34,26 @@ func TestParse(t *testing.T) {
 			t.Errorf("Files(%s) doesn't parse HTML in BodyHTML", dir)
 		}
 
+		// Test for specific props like "date" "slug" etc
+		if firstPost.Slug == "" {
+			t.Errorf("Files(%s) first item has an empty slug", dir)
+		}
+		if firstPost.Date.IsZero() {
+			t.Errorf("Files(%s) first item has an empty date", dir)
+		}
+
+		// Test the result order (should be chronological)
+		var prevDate time.Time
+		for i := range posts {
+			p := posts[i]
+			if prevDate.IsZero() {
+				prevDate = p.Date
+				continue
+			}
+			if prevDate.Before(p.Date) {
+				t.Errorf("Files(%s) doesn't sort posts chronologically", dir)
+			}
+			prevDate = p.Date
+		}
 	})
 }
