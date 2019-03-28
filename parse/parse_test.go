@@ -42,7 +42,7 @@ func TestParse(t *testing.T) {
 			t.Errorf("Files(%s) first item has an empty date", dir)
 		}
 
-		// Test the result order (should be chronological)
+		// Test the result order (should be chronological new -> old)
 		var prevDate time.Time
 		for i := range posts {
 			p := posts[i]
