@@ -1,15 +1,15 @@
 package parse
 
 import (
-	"bytes"
-	"github.com/gernest/front"
 	"gopkg.in/russross/blackfriday.v2"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 	"regexp"
 	"sort"
+	"strings"
 	"time"
 )
 
@@ -69,14 +69,17 @@ func readMDFiles(dir string) ([]mdFile, error) {
 	return mdFiles, nil
 }
 
-func extractYAMLFrontmatter(body []byte) (map[string]interface{}, string, error) {
-	m := front.NewMatter()
-	m.Handle("---", front.YAMLHandler)
-	f, b, err := m.Parse(bytes.NewReader(body))
+func extractYAMLFrontmatter(body []byte) (map[string]string, string, error) {
+	frontmatterPattern := regexp.MustCompile(`---\n(.*: .*\n)+---`)
+	bodyString := frontmatterPattern.ReplaceAllString(string(body), "")
+	frontmatterString := frontmatterPattern.Find(body)
+	plainYAMLString := strings.Replace(string(frontmatterString), "---", "", -1)
+	parsedYAML := make(map[string]string)
+	err := yaml.Unmarshal([]byte(plainYAMLString), &parsedYAML)
 	if err != nil {
-		return nil, "", err
+		return nil, bodyString, err
 	}
-	return f, b, nil
+	return parsedYAML, bodyString, nil
 }
 
 func sortFilesChronological(f []mdFile) ([]mdFile, error) {
@@ -108,7 +111,7 @@ func Files(dir string) ([]Parsed, error) {
 		}
 		bodyHTML := blackfriday.Run([]byte(body))
 		post := Parsed{
-			Title:     meta["title"].(string),
+			Title:     meta["title"],
 			Date:      f.date,
 			Slug:      f.slug,
 			BodyPlain: body,
