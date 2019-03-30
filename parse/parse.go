@@ -73,7 +73,7 @@ func extractYAMLFrontmatter(body []byte) (map[string]string, string, error) {
 	frontmatterPattern := regexp.MustCompile(`---\n(.*: .*\n)+---`)
 	bodyString := frontmatterPattern.ReplaceAllString(string(body), "")
 	frontmatterString := frontmatterPattern.Find(body)
-	plainYAMLString := strings.Replace(string(frontmatterString), "---", "", -1)
+	plainYAMLString := strings.Replace(string(frontmatterString), "---", "", 2)
 	parsedYAML := make(map[string]string)
 	err := yaml.Unmarshal([]byte(plainYAMLString), &parsedYAML)
 	if err != nil {
