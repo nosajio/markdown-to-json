@@ -89,6 +89,15 @@ func sortFilesChronological(f []mdFile) ([]mdFile, error) {
 	return fSorted, nil
 }
 
+func parseBodyHTML(b []byte) []byte {
+	// Custom img tag
+	imgTagPattern := regexp.MustCompile(`(?im)\%img(\[.*\])(\(.*\))`)
+	b = imgTagPattern.ReplaceAll(b, []byte("<img src=\"$2\" alt=\"$1\" />"))
+	// Render standard markdown
+	bodyHTML := blackfriday.Run(b)
+	return bodyHTML
+}
+
 // Files parses a directory of markdown files and converts them into Post
 // types
 func Files(dir string) ([]Parsed, error) {
@@ -109,7 +118,7 @@ func Files(dir string) ([]Parsed, error) {
 			log.Printf("Could not extract frontmatter for %s (%s)", f.filename, err.Error())
 			continue
 		}
-		bodyHTML := blackfriday.Run([]byte(body))
+		bodyHTML := parseBodyHTML([]byte(body))
 		post := Parsed{
 			Title:     meta["title"],
 			Date:      f.date,

@@ -2,6 +2,7 @@ package parse
 
 import (
 	"github.com/nosajio/markdown-to-json/download"
+	"regexp"
 	"strings"
 	"testing"
 	"time"
@@ -54,6 +55,17 @@ func TestParse(t *testing.T) {
 				t.Errorf("Files(%s) doesn't sort posts chronologically", dir)
 			}
 			prevDate = p.Date
+		}
+
+		// Test custom markdown tags for images
+		imgTagPattern := regexp.MustCompile(`(?im)\%img\[.*\]\(.*\)`)
+		// The parser will misparse by assuming img tags are links with %img before them
+		imgTagBadParsingPattern := regexp.MustCompile(`(?im)\%img<a`)
+		for i := range posts {
+			p := posts[i]
+			if imgTagPattern.Match([]byte(p.BodyPlain)) && imgTagBadParsingPattern.Match([]byte(p.BodyHTML)) {
+				t.Errorf("Files(%s) doesn't parse custom %%img[]() tags into HTML", dir)
+			}
 		}
 	})
 }
