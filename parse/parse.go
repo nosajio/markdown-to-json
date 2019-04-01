@@ -91,7 +91,7 @@ func sortFilesChronological(f []mdFile) ([]mdFile, error) {
 
 func parseBodyHTML(b []byte) []byte {
 	// Custom img tag
-	imgTagPattern := regexp.MustCompile(`(?im)\%img(\[.*\])(\(.*\))`)
+	imgTagPattern := regexp.MustCompile(`(?im)\%img\[(.*)\]\((.*)\)`)
 	b = imgTagPattern.ReplaceAll(b, []byte("<img src=\"$2\" alt=\"$1\" />"))
 	// Render standard markdown
 	bodyHTML := blackfriday.Run(b)
